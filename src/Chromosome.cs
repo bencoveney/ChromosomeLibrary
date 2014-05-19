@@ -183,16 +183,6 @@ namespace ChromosomeLibrary
         /// <returns>Bit-array with random data</returns>
         private static BitArray generateRandomBitArray(int bitArraySize)
         {
-            // Calculate number of bytes required to store bitArraySize amount of bits
-            int numberOfBytes = (int)Math.Ceiling((double)(bitArraySize / 8));
-
-            // Create random data to populate the BitArray
-            Int32[] dummyData = new Int32[numberOfBytes];
-            for (int i = 0; i < dummyData.Length; i++)
-            {
-                dummyData[i] = r.Next(Int32.MinValue, Int32.MaxValue);
-            }
-
             // Create random data to populate the BitArray
             bool[] bits = new bool[bitArraySize];
             for(int i = 0; i < bitArraySize; i++)
