@@ -70,8 +70,20 @@ namespace ChromosomeLibrary
 
         #region Genetic Operations
 
-        public static IEnumerable<Chromosome> Reproduce(Chromosome ParentA, Chromosome ParentB, float MutationRate, float CrossoverRate)
+        /// <summary>
+        /// Performs single-point crossover and mutation operations on parents, giving 2 child chromosomes
+        /// </summary>
+        /// <param name="ParentA">The first Parent chromosome to use</param>
+        /// <param name="ParentB">The second Parent chromosome to use</param>
+        /// <param name="CrossoverRate">The percentage chance of crossover</param>
+        /// <param name="MutationRate">The percentage chance of mutation</param>
+        /// <returns>Child Chromosomes</returns>
+        public static IEnumerable<Chromosome> Reproduce(Chromosome ParentA, Chromosome ParentB, float CrossoverRate, float MutationRate)
         {
+            // Parameter Validation
+            if (MutationRate > 1 || MutationRate < 0) throw new ArgumentOutOfRangeException("MutationRate", "Invalid mutation rate, must be a value between 0 and 1");
+            if (CrossoverRate > 1 || CrossoverRate < 0) throw new ArgumentOutOfRangeException("CrossoverRate", "Invalid crossover rate, must be a value between 0 and 1");
+
             List<Chromosome> children;
 
             // Perform a biased coin flip.
@@ -143,8 +155,6 @@ namespace ChromosomeLibrary
         /// <param name="MutationRate">The probability a random bit will become flipped</param>
         private void mutate(float MutationRate)
         {
-            // TODO Validate MutationRate
-
             // For every bit.
             for (int i = 0; i < _data.Length; i++)
             {
