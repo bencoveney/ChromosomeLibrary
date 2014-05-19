@@ -16,12 +16,12 @@ namespace ChromosomeLibrary
         private BitArray _data;
         public BitArray Data { get { return _data; } }
         public int Length { get { return _data.Length; } }
-        public bool this[int number]
+        public bool this[int Index]
         {
             get
             {
-                if (number < 0 || number >= _data.Length) throw new IndexOutOfRangeException("Invalid Index");
-                return _data[number];
+                if (Index < 0 || Index >= _data.Length) throw new IndexOutOfRangeException("Invalid Index");
+                return _data[Index];
             }
         }
 
@@ -222,6 +222,20 @@ namespace ChromosomeLibrary
             }
 
             return result.ToString();
+        }
+
+        /// <summary>
+        /// Produces a boolean array representing the bit-string data
+        /// </summary>
+        /// <returns>An array of booleans</returns>
+        public bool[] ToBoolArray()
+        {
+            bool[] returnArray = new bool[Length];
+            for (int i = 0; i < Length; i++)
+            {
+                returnArray[i] = this[i];
+            }
+            return returnArray;
         }
     }
 }
