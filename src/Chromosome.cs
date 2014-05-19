@@ -10,9 +10,15 @@ namespace ChromosomeLibrary
     {
         private static Random r = new Random((int)DateTime.Now.Ticks);
 
+        #region Data Members
+
         // Chromosome's bit-string
         private BitArray _data;
         public BitArray Data { get { return _data; } }
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Constructs a Chromosome from a given bit-string.
@@ -46,23 +52,46 @@ namespace ChromosomeLibrary
         }
 
         /// <summary>
-        /// Flips bits in the bit-string
+        /// Creates a Chromosome using random data.
         /// </summary>
-        /// <param name="MutationRate">The probability a random bit will become flipped</param>
-        public void Mutate(float MutationRate)
+        /// <param name="bitStringSize">The length of the bit-string</param>
+        /// <returns>Chromosome with random data</returns>
+        public static Chromosome GenerateRandomChromosome(int bitStringSize)
         {
-            // TODO Validate MutationRate
+            BitArray bitString = generateRandomBitArray(bitStringSize);
+            return new Chromosome(bitString);
+        }
 
-            // For every bit.
-            for (int i = 0; i < _data.Length; i++)
+        #endregion
+
+        #region Genetic Operations
+
+        public static Chromosome[] Reproduce(Chromosome ParentA, Chromosome ParentB, float MutationRate, float CrossoverRate)
+        {
+            // TODO change return type to IEnumerable
+
+            Chromosome[] children = new Chromosome[2];
+
+            // Perform a biased coin flip.
+            if (CrossoverRate > r.NextDouble())
             {
-                // Perform a biased coin filp.
-                if (MutationRate > r.NextDouble())
-                {
-                    // Flip the bit.
-                    _data[i] = !_data[i];
-                }
+                // Crossover
+                children = Crossover(ParentA, ParentB);
             }
+            else
+            {
+                // No crossover
+                children[0] = new Chromosome(ParentA.Data);
+                children[1] = new Chromosome(ParentB.Data);
+            }
+
+            // Mutate each gene
+            foreach (Chromosome c in children)
+            {
+                c.Mutate(MutationRate);
+            }
+
+            return children;
         }
 
         /// <summary>
@@ -70,8 +99,11 @@ namespace ChromosomeLibrary
         /// </summary>
         /// <param name="Genes">Parent Genes</param>
         /// <returns>Child Genes</returns>
-        public static Chromosome[] Crossover(Chromosome GeneA, Chromosome GeneB)
+        private static Chromosome[] Crossover(Chromosome GeneA, Chromosome GeneB)
         {
+            // TODO change return type to IEnumerable
+            // TODO change method to per-instance instead of static
+
             // Generate a crossover point between 0 and the chromosome length
             int chromosomeSize = GeneA._data.Length;
             int crossoverPoint = r.Next(0, chromosomeSize);
@@ -103,9 +135,35 @@ namespace ChromosomeLibrary
             return result;
         }
 
-        public static BitArray GenerateRandomBitArray(int bitArraySize)
+        /// <summary>
+        /// Flips bits in the bit-string
+        /// </summary>
+        /// <param name="MutationRate">The probability a random bit will become flipped</param>
+        private void Mutate(float MutationRate)
         {
+            // TODO Validate MutationRate
 
+            // For every bit.
+            for (int i = 0; i < _data.Length; i++)
+            {
+                // Perform a biased coin filp.
+                if (MutationRate > r.NextDouble())
+                {
+                    // Flip the bit.
+                    _data[i] = !_data[i];
+                }
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Creates a bit-array filled with random data.
+        /// </summary>
+        /// <param name="bitArraySize">The bit-array's length</param>
+        /// <returns>Bit-array with random data</returns>
+        private static BitArray generateRandomBitArray(int bitArraySize)
+        {
             // Calculate number of bytes required to store bitArraySize amount of bits
             int numberOfBytes = (int)Math.Ceiling((double)(bitArraySize / 8));
 
