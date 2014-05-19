@@ -66,32 +66,31 @@ namespace ChromosomeLibrary
 
         #region Genetic Operations
 
-        public static Chromosome[] Reproduce(Chromosome ParentA, Chromosome ParentB, float MutationRate, float CrossoverRate)
+        public static IEnumerable<Chromosome> Reproduce(Chromosome ParentA, Chromosome ParentB, float MutationRate, float CrossoverRate)
         {
-            // TODO change return type to IEnumerable
-
-            Chromosome[] children = new Chromosome[2];
+            List<Chromosome> children;
 
             // Perform a biased coin flip.
             if (CrossoverRate > r.NextDouble())
             {
                 // Crossover
-                children = Crossover(ParentA, ParentB);
+                children = crossover(ParentA, ParentB);
             }
             else
             {
                 // No crossover
-                children[0] = new Chromosome(ParentA.Data);
-                children[1] = new Chromosome(ParentB.Data);
+                children = new List<Chromosome>();
+                children.Add(new Chromosome(ParentA.Data));
+                children.Add(new Chromosome(ParentB.Data));
             }
 
             // Mutate each gene
             foreach (Chromosome c in children)
             {
-                c.Mutate(MutationRate);
+                c.mutate(MutationRate);
             }
 
-            return children;
+            return (IEnumerable<Chromosome>)children;
         }
 
         /// <summary>
@@ -99,9 +98,8 @@ namespace ChromosomeLibrary
         /// </summary>
         /// <param name="Genes">Parent Genes</param>
         /// <returns>Child Genes</returns>
-        private static Chromosome[] Crossover(Chromosome GeneA, Chromosome GeneB)
+        private static List<Chromosome> crossover(Chromosome GeneA, Chromosome GeneB)
         {
-            // TODO change return type to IEnumerable
             // TODO change method to per-instance instead of static
 
             // Generate a crossover point between 0 and the chromosome length
@@ -128,9 +126,9 @@ namespace ChromosomeLibrary
             }
 
             // package the results together and return them
-            Chromosome[] result = new Chromosome[2];
-            result[0] = new Chromosome(ChildA);
-            result[1] = new Chromosome(ChildB);
+            List<Chromosome> result = new List<Chromosome>();
+            result.Add(new Chromosome(ChildA));
+            result.Add(new Chromosome(ChildB));
 
             return result;
         }
@@ -139,7 +137,7 @@ namespace ChromosomeLibrary
         /// Flips bits in the bit-string
         /// </summary>
         /// <param name="MutationRate">The probability a random bit will become flipped</param>
-        private void Mutate(float MutationRate)
+        private void mutate(float MutationRate)
         {
             // TODO Validate MutationRate
 
