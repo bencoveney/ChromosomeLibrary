@@ -18,6 +18,7 @@ Chromosomes can also be created from given data:
 ```c#
 string data = "01101001";
 Chromosome init = new Chromosome(data);
+```
 
 Genetic data from two parents can be combined to produce child chromosomes:
 ```c#
