@@ -174,12 +174,24 @@ namespace ChromosomeLibrary
                 dummyData[i] = r.Next(Int32.MinValue, Int32.MaxValue);
             }
 
-            // Convert bytearray to bitarray
-            BitArray data = new BitArray(dummyData);
+            // Create random data to populate the BitArray
+            bool[] bits = new bool[bitArraySize];
+            for(int i = 0; i < bitArraySize; i++)
+            {
+                // Set each bit to a random bool
+                bits[i] = r.NextDouble() > 0.5 ? true : false;
+            }
 
+            // Convert bit[] to bitarray
+            BitArray data = new BitArray(bits);
+            
             return data;
         }
 
+        /// <summary>
+        /// Produces a string containing the bit-string data
+        /// </summary>
+        /// <returns>A string of bits</returns>
         public override string ToString()
         {
             StringBuilder result = new StringBuilder();
