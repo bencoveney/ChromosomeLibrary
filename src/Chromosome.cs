@@ -35,8 +35,6 @@ namespace ChromosomeLibrary
         /// <param name="Data">Bit-string Data</param>
         public Chromosome(string Data)
         {
-            // TODO validate string input
-
             // Initialise the bit-string with the default value of 0.
             _data = new BitArray(Data.Length, false);
 
@@ -44,6 +42,12 @@ namespace ChromosomeLibrary
             for (int i = 0; i < Data.Length; i++)
             {
                 Char bit = Data[i];
+
+                if ( (!bit.Equals('0')) && (!bit.Equals('1')))
+                {
+                    throw new ArgumentException("Only '1' and '0' allowed for bit-string creation", Data);
+                }
+
                 if (bit == '1')
                 {
                     _data[i] = true;
