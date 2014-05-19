@@ -15,6 +15,15 @@ namespace ChromosomeLibrary
         // Chromosome's bit-string
         private BitArray _data;
         public BitArray Data { get { return _data; } }
+        public int Length { get { return _data.Length; } }
+        public bool this[int number]
+        {
+            get
+            {
+                if (number < 0 || number >= _data.Length) throw new IndexOutOfRangeException("Invalid Index");
+                return _data[number];
+            }
+        }
 
         #endregion
 
@@ -43,10 +52,8 @@ namespace ChromosomeLibrary
             {
                 Char bit = Data[i];
 
-                if ( (!bit.Equals('0')) && (!bit.Equals('1')))
-                {
-                    throw new ArgumentException("Only '1' and '0' allowed for bit-string creation", Data);
-                }
+                // Check for invalid characters
+                if ( (!bit.Equals('0')) && (!bit.Equals('1'))) throw new ArgumentException("Only '1' and '0' allowed for bit-string creation", Data);
 
                 if (bit == '1')
                 {
